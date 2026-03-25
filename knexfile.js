@@ -1,4 +1,4 @@
-require("dotenv").config({ silent: true });
+require("dotenv").config({ quiet: true });
 
 module.exports = {
   client: "pg",

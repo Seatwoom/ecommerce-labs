@@ -1,8 +1,8 @@
-require("dotenv").config({ silent: true });
+require("dotenv").config({ quiet: true });
 const express = require("express");
-const config = require("./knexfile");
-const knex = require("knex")(config);
 const pino = require("pino")();
+const knexfile = require("./knexfile");
+const knex = require("knex")(knexfile);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -35,33 +35,18 @@ app.get("/health", async (req, res) => {
 const start = async () => {
   try {
     pino.info({ message: "Running migrations..." });
-    await knex.migrate.latest();
+    await knex.migrate.latest({ silent: true });
 
     const server = app.listen(PORT, () => {
       pino.info({ message: `Server started on port ${PORT}` });
     });
 
     const shutdown = (signal) => {
-      pino.info({
-        timestamp: new Date().toISOString(),
-        level: "INFO",
-        message: `${signal} received. Starting graceful shutdown...`,
-      });
-
+      pino.info({ message: `${signal} received. Shutting down...` });
       server.close(async () => {
-        pino.info({ message: "HTTP server closed." });
         await knex.destroy();
-        pino.info({ message: "Database connections closed. Process exited." });
         process.exit(0);
       });
-
-      setTimeout(() => {
-        pino.error({
-          message:
-            "Could not close connections in time, forcefully shutting down",
-        });
-        process.exit(1);
-      }, 10000);
     };
 
     process.on("SIGTERM", () => shutdown("SIGTERM"));

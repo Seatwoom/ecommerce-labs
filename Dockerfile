@@ -12,5 +12,7 @@ COPY --from=builder /app/server.js ./
 COPY --from=builder /app/knexfile.js ./
 COPY --from=builder /app/migrations ./migrations
 
+RUN rm -f .env
+
 EXPOSE 8080
 CMD ["npm", "start"]
