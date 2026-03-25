@@ -2,7 +2,7 @@ name: Lab 2 CI/CD Pipeline
 
 on:
   push:
-    branches: [lab2, main, lab3]
+    branches: [lab2, main, lab3, lab4]
 
 permissions:
   contents: read
