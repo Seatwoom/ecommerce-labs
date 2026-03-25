@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ silent: true });
 const express = require("express");
 const config = require("./knexfile");
 const knex = require("knex")(config);
