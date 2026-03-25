@@ -1,0 +1,20 @@
+{
+  "name": "ecommerce-labs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "knex": "^3.2.6",
+    "pg": "^8.20.0",
+    "pino": "^10.3.1"
+  }
+}
