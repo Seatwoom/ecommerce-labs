@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ecommerce-app
-          image: ghcr.io/seatwooom/ecommerce-app:latest
+          image: ghcr.io/seatwoom/ecommerce-app:latest
           ports:
             - containerPort: 8080
           envFrom:
