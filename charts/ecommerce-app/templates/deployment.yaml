@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: ecommerce-app 
+        app: ecommerce-app
     spec:
       containers:
         - name: ecommerce-app

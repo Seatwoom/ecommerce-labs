@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: ecommerce-app-service
 spec:
-  type: { { .Values.service.type | default "ClusterIP" } }
+  type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
-    - port: { { .Values.service.port | default 80 } }
+    - port: {{ .Values.service.port | default 80 }}
       targetPort: 8080
       protocol: TCP
   selector:
