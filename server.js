@@ -24,15 +24,16 @@ app.get("/health", async (req, res) => {
     pino.error({
       timestamp: new Date().toISOString(),
       level: "ERROR",
-      message: "Database connection failed, but returning 200 for K8s probes",
+      message: "Database connection failed",
     });
-
-    res.status(200).json({
-      status: "Degraded",
-      database: "disconnected",
-      message: "App is alive, but DB is unreachable",
-    });
+    res
+      .status(503)
+      .json({ status: "Service Unavailable", database: "disconnected" });
   }
+});
+
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
 });
 
 const start = async () => {
@@ -42,7 +43,7 @@ const start = async () => {
     try {
       await knex.migrate.latest({ silent: true });
     } catch (e) {
-      pino.error({ message: "Migrations failed (no DB), skipping..." });
+      pino.error({ message: "Migrations skipped (DB not ready)" });
     }
 
     const server = app.listen(PORT, () => {
@@ -53,6 +54,7 @@ const start = async () => {
       pino.info({ message: `${signal} received. Shutting down...` });
       server.close(async () => {
         await knex.destroy();
+        pino.info({ message: "Process exited." });
         process.exit(0);
       });
     };
