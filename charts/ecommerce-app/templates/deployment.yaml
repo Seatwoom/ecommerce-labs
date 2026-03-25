@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: { { include "ecommerce-app.fullname" . | default "ecommerce-app" } }
+  name: {{ include "ecommerce-app.fullname" . | default "ecommerce-app" }}
 spec:
-  replicas: { { .Values.replicaCount } }
+  replicas: {{ .Values.replicaCount | default 2 }}
   selector:
     matchLabels:
       app: ecommerce-app
@@ -14,11 +14,12 @@ spec:
     spec:
       containers:
         - name: ecommerce-app
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: { { .Values.image.pullPolicy | default "Always" } }
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default `latest` }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
           ports:
             - containerPort: 8080
-          resources: { { - toYaml .Values.resources | nindent 12 } }
+          resources:
+{{ toYaml .Values.resources | nindent 12 }}
           envFrom:
             - secretRef:
                 name: ecommerce-secret
