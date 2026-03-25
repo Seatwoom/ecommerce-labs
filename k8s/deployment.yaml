@@ -23,14 +23,14 @@ spec:
             - configMapRef:
                 name: ecommerce-config
           livenessProbe:
-          httpGet:
-            path: /ping  
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ping  
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
+            httpGet:
+              path: /ping
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
