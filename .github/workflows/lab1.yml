@@ -1,6 +1,8 @@
 name: Lab 1 Grading
 
-on: [push]
+on:
+  push:
+    branches: [main, lab1]
 
 jobs:
   validate:

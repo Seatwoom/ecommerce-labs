@@ -24,7 +24,7 @@ app.get("/health", async (req, res) => {
     pino.error({
       timestamp: new Date().toISOString(),
       level: "ERROR",
-      message: "DB connection failed",
+      message: "Database connection failed",
     });
     res
       .status(503)
@@ -32,10 +32,19 @@ app.get("/health", async (req, res) => {
   }
 });
 
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
+});
+
 const start = async () => {
   try {
     pino.info({ message: "Running migrations..." });
-    await knex.migrate.latest({ silent: true });
+
+    try {
+      await knex.migrate.latest({ silent: true });
+    } catch (e) {
+      pino.error({ message: "Migrations skipped (DB not ready)" });
+    }
 
     const server = app.listen(PORT, () => {
       pino.info({ message: `Server started on port ${PORT}` });
@@ -45,6 +54,7 @@ const start = async () => {
       pino.info({ message: `${signal} received. Shutting down...` });
       server.close(async () => {
         await knex.destroy();
+        pino.info({ message: "Process exited." });
         process.exit(0);
       });
     };
